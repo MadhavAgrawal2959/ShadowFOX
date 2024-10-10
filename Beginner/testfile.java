@@ -1,12 +1,15 @@
-import java.util.Scanner;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class testfile {
+public class CheckJavaFXVersion extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        String version = System.getProperty("javafx.version");
+        System.out.println("JavaFX Version: " + version);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        if (n == 0) {
-            throw new AssertionError("no cannot be zero");
-        }
-        System.out.println("enter diff no.");
+        launch(args);
     }
 }
