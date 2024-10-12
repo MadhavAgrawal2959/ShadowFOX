@@ -2,8 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fx_crud.Contoller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fx_crud.Contoller">
     <children>
         <GridPane layoutX="27.0" layoutY="30.0" prefHeight="87.0" prefWidth="570.0">
             <columnConstraints>
@@ -45,26 +43,10 @@
                 <TextField fx:id="LastName" prefHeight="13.0" prefWidth="445.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
-        <Button fx:id="New_Data"  onAction="#Add_Data_database" layoutX="52.0" layoutY="217.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="New" />
-        <Button fx:id="Save_Data" layoutX="246.0" layoutY="217.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="Save" />
-        <Button fx:id="Update_Data" layoutX="427.0" layoutY="217.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="109.0" text="Update" />
-        <Button fx:id="Delete_Data" layoutX="614.0" layoutY="217.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="Delete" />
-        <Label alignment="CENTER" layoutX="107.0" layoutY="289.0" prefHeight="35.0" prefWidth="109.0" text="Search: ">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-        <TextField fx:id="Search_Data" layoutX="213.0" layoutY="289.0" prefHeight="35.0" prefWidth="401.0" promptText="Search..." />
-        <TableView layoutX="35.0" layoutY="361.0" prefHeight="418.0" prefWidth="738.0">
-            <columns>
-                <TableColumn prefWidth="44.0" text="S. No." />
-                <TableColumn prefWidth="106.0" text="First Name" />
-                <TableColumn prefWidth="101.0" text="Middle Name" />
-                <TableColumn prefWidth="96.0" text="Last Name" />
-                <TableColumn prefWidth="121.0" text="Phone No." />
-                <TableColumn prefWidth="269.0" text="Email" />
-            </columns>
-        </TableView>
+        <Button fx:id="New_Data" layoutX="52.0" layoutY="217.0" mnemonicParsing="false" onMouseClicked="#Add_Data_database" prefHeight="25.0" prefWidth="109.0" text="New" />
+        <Button fx:id="Save_Data" layoutX="246.0" layoutY="217.0" mnemonicParsing="false" onMouseClicked="#Add_Data_database" prefHeight="25.0" prefWidth="109.0" text="Save" />
+        <Button fx:id="Update_Data" layoutX="427.0" layoutY="217.0" mnemonicParsing="false" onMouseClicked="#Update_Data_database" prefHeight="16.0" prefWidth="109.0" text="Update" />
+        <Button fx:id="Delete_Data" layoutX="614.0" layoutY="217.0" mnemonicParsing="false" onMouseClicked="#Delete_Data_database" prefHeight="25.0" prefWidth="109.0" text="Delete" />
         <GridPane layoutX="27.0" layoutY="116.0" prefHeight="95.0" prefWidth="570.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="210.0" />
