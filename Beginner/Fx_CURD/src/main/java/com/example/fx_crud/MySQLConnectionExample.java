@@ -1,36 +1,85 @@
-package com.example.fx_crud;
+package com.example.fx_crud;//package com.example.fx_crud;
+//
+//import java.sql.*;
+//
+//public class MySQLConnectionExample {
+//    public static void main(String[] args) {
+//        // JDBC URL format: jdbc:mysql://<host>:<port>/<database>
+//        String jdbcUrl = "jdbc:mysql://localhost:3306/testdb";
+//        String username = "root"; // Your MySQL username
+//        String password = "1234"; // Your MySQL password
+//
+//        try {
+//            // Establishing a connection to the database
+//            Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+//            System.out.println("Connection successful!");
+//
+//            // Perform your database operations here
+//
+//            // Close the connection
+//
+//            String query = "SELECT * FROM users";
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery(query);
+//
+//            // Process the result set
+//            while (resultSet.next()) {
+//                System.out.println("Column1: " + resultSet.getString("username"));
+//                System.out.println("Column2: " + resultSet.getInt(""));
+//            }
+//            connection.close();
+//        } catch (SQLException e) {
+//            // Handle SQL exceptions (e.g., wrong credentials, wrong database URL)
+//            e.printStackTrace();
+//        }
+//    }
+//}
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class MySQLConnectionExample {
     public static void main(String[] args) {
-        // JDBC URL format: jdbc:mysql://<host>:<port>/<database>
-        String jdbcUrl = "jdbc:mysql://localhost:3306/testdb";
+        String jdbcUrl = "jdbc:mysql://localhost:3306/testdb"; // Your DB name
         String username = "root"; // Your MySQL username
         String password = "1234"; // Your MySQL password
 
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
         try {
             // Establishing a connection to the database
-            Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            System.out.println("Connection successful!");
+            connection = DriverManager.getConnection(jdbcUrl, username, password);
+            System.out.println("Connected to MySQL database!");
 
-            // Perform your database operations here
+            // SQL query to insert a new user (note: id and created_at are auto-handled)
+            String sql = "INSERT INTO users (username, email) VALUES (?, ?)";
 
-            // Close the connection
+            // Creating a PreparedStatement
+            preparedStatement = connection.prepareStatement(sql);
 
-            String query = "SELECT * FROM users";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            // Setting values for the username and email fields
+            preparedStatement.setString(1, "new_user"); // Replace with dynamic value if needed
+            preparedStatement.setString(2, "newuser@example.com"); // Replace with dynamic value if needed
 
-            // Process the result set
-            while (resultSet.next()) {
-                System.out.println("Column1: " + resultSet.getString("username"));
-                System.out.println("Column2: " + resultSet.getInt(""));
+            // Executing the SQL query
+            int rowsInserted = preparedStatement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("A new user was inserted successfully!");
             }
-            connection.close();
+
         } catch (SQLException e) {
-            // Handle SQL exceptions (e.g., wrong credentials, wrong database URL)
             e.printStackTrace();
+        } finally {
+            // Closing the resources
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
