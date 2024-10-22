@@ -1,0 +1,41 @@
+requirements.txt
+makefile
+Copy code
+javafx-controls=22.0.1
+javafx-fxml=22.0.1
+mysql-connector-java=8.0.33
+openjfx=22.0.1
+
+Images
+On Adding Data:
+
+Image name: success.png
+Description: This image will be displayed when a new product is successfully added to the inventory.
+On SQL Success:
+
+Image name: sql-success.png
+Description: This image will be displayed upon successful database interaction, such as adding a new entry to the database.
+File Structure for JavaFX Project
+Make sure you place your images in the following structure:
+
+css
+Copy code
+src
+└── main
+    ├── java
+    │   └── applications.inventory
+    │       └── Controller.java
+    ├── resources
+    │   └── images
+    │       ├── success.png
+    │       └── sql-success.png
+    └── fxml
+        └── InventoryManagement.fxml
+Images Placement
+success.png should be placed inside the src/main/resources/images/ folder.
+sql-success.png should also be placed inside the src/main/resources/images/ folder.
+
+
+
+
+

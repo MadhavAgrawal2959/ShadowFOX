@@ -11,13 +11,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Controller {
 
-    // FXML Components: TableView and Columns
     @FXML
     private TableView<Product> tableView;
     @FXML
@@ -35,7 +36,6 @@ public class Controller {
     @FXML
     private TableColumn<Product, String> colVendorName;
 
-    // FXML Text Fields for user input
     @FXML
     private TextField txtProductId;
     @FXML
@@ -49,12 +49,10 @@ public class Controller {
     @FXML
     private TextField txtVendorName;
 
-    // Observable list to hold product data
     private final ObservableList<Product> productList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Set up the table columns to bind to Product properties
         colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
         colProductType.setCellValueFactory(new PropertyValueFactory<>("productType"));
@@ -63,15 +61,47 @@ public class Controller {
         colProductPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
         colVendorName.setCellValueFactory(new PropertyValueFactory<>("vendorName"));
 
-        // Load initial data into the TableView
+        // Load data from the database when initializing
+        try {
+            loadProductsFromDatabase();
+        } catch (SQLException e) {
+            System.out.println("Error loading data: " + e.getMessage());
+        }
+
         tableView.setItems(productList);
     }
 
-    // Method to handle new product entry
+    private void loadProductsFromDatabase() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/inventory_management";
+        String user = "root";
+        String password = "1234";
+
+        String sql = "SELECT * FROM inventory";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            productList.clear();
+
+            while (rs.next()) {
+                int productId = rs.getInt("Product_id");
+                String productName = rs.getString("Product_Name");
+                String productType = rs.getString("Product_type");
+                String productArrival = rs.getString("Product_Arrival");
+                int quantity = rs.getInt("Quantity_In_Stock");
+                double productPrice = rs.getDouble("Product_Price");
+                String vendorName = rs.getString("Product_Supplier");
+
+                Product product = new Product(productId, productName, productType, productArrival, quantity, productPrice, vendorName);
+                productList.add(product);
+            }
+        }
+    }
+
     @FXML
     public void handleNewEntry() {
         try {
-            // Extract input values
             int productId = Integer.parseInt(txtProductId.getText());
             String productName = txtProductName.getText();
             String productType = txtProductType.getText();
@@ -80,14 +110,9 @@ public class Controller {
             double productPrice = Double.parseDouble(txtProductPrice.getText());
             String vendorName = txtVendorName.getText();
 
-            // Create a new Product object
             Product newProduct = new Product(productId, productName, productType, formattedDateTime, quantity, productPrice, vendorName);
-
-            // Add product to list and save it to the database
             productList.add(newProduct);
             saveToDatabase(newProduct);
-
-            // Clear input fields after entry
             clearInputFields();
 
         } catch (NumberFormatException e) {
@@ -97,15 +122,12 @@ public class Controller {
         }
     }
 
-    // Method to save product to MySQL database
     private void saveToDatabase(Product product) throws SQLException {
-        // Connection details for the database
-        String url = "jdbc:mysql://localhost:3306/inventory_management"; // Update with your database name
-        String user = "root"; // Update with your MySQL username
-        String password = "1234"; // Update with your MySQL password
+        String url = "jdbc:mysql://localhost:3306/inventory_management";
+        String user = "root";
+        String password = "1234";
 
-        // SQL query to insert new product
-        String sql = "INSERT INTO products (Product_id, Product_Name, Product_type, Product_Arrival, Quantity_In_Stock, Product_Price, Product_Supplier) "
+        String sql = "INSERT INTO inventory (Product_id, Product_Name, Product_type, Product_Arrival, Quantity_In_Stock, Product_Price, Product_Supplier) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
@@ -121,44 +143,73 @@ public class Controller {
         }
     }
 
-    // Method to handle product modification
     @FXML
     public void handleChange() {
         Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
 
         if (selectedProduct != null) {
-            // Update product details from text fields
             selectedProduct.setProductId(Integer.parseInt(txtProductId.getText()));
             selectedProduct.setProductName(txtProductName.getText());
             selectedProduct.setProductType(txtProductType.getText());
 
-            // Refresh the TableView to reflect changes
             tableView.refresh();
-
-            // Clear input fields after modification
+            updateDatabase(selectedProduct);
             clearInputFields();
         } else {
             System.out.println("No product selected for modification.");
         }
     }
 
-    // Method to handle product deletion
+    private void updateDatabase(Product product) {
+        String url = "jdbc:mysql://localhost:3306/inventory_management";
+        String user = "root";
+        String password = "1234";
+
+        String sql = "UPDATE inventory SET Product_Name=?, Product_type=?, Quantity_In_Stock=?, Product_Price=?, Product_Supplier=? WHERE Product_id=?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, product.getProductName());
+            pstmt.setString(2, product.getProductType());
+            pstmt.setInt(3, product.getQuantity());
+            pstmt.setDouble(4, product.getProductPrice());
+            pstmt.setString(5, product.getVendorName());
+            pstmt.setInt(6, product.getProductId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Database update error: " + e.getMessage());
+        }
+    }
+
     @FXML
     public void handleDelete() {
         Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
 
         if (selectedProduct != null) {
-            // Remove selected product from the list
             productList.remove(selectedProduct);
-
-            // Clear input fields after deletion
+            deleteFromDatabase(selectedProduct.getProductId());
             clearInputFields();
         } else {
             System.out.println("No product selected for deletion.");
         }
     }
 
-    // Clear all input fields after an action
+    private void deleteFromDatabase(int productId) {
+        String url = "jdbc:mysql://localhost:3306/inventory_management";
+        String user = "root";
+        String password = "1234";
+
+        String sql = "DELETE FROM inventory WHERE Product_id=?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Database deletion error: " + e.getMessage());
+        }
+    }
+
     private void clearInputFields() {
         txtProductId.clear();
         txtProductName.clear();

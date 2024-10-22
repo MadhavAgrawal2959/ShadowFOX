@@ -1,35 +1,3 @@
-//package applications.inventory;
-//
-//
-//import javafx.beans.property.*;
-//
-//public class Product {
-//    private final IntegerProperty productId;
-//    private final StringProperty productName;
-//    private final StringProperty productType;
-//    private final IntegerProperty quantity;
-//    private final DoubleProperty price;
-//    private final StringProperty productSupplier;
-//
-//    public Product(int productId, String productName, String productType, int quantity, double price, String productSupplier) {
-//        this.productId = new SimpleIntegerProperty(productId);
-//        this.productName = new SimpleStringProperty(productName);
-//        this.productType = new SimpleStringProperty(productType);
-//        this.quantity = new SimpleIntegerProperty(quantity);
-//        this.price = new SimpleDoubleProperty(price);
-//        this.productSupplier = new SimpleStringProperty(productSupplier);
-//    }
-//
-//    // Getters
-//    public IntegerProperty productIdProperty() { return productId; }
-//    public StringProperty productNameProperty() { return productName; }
-//    public StringProperty productTypeProperty() { return productType; }
-//    public IntegerProperty quantityProperty() { return quantity; }
-//    public DoubleProperty priceProperty() { return price; }
-//    public StringProperty productSupplierProperty() { return productSupplier; }
-//}
-
-
 package applications.inventory;
 
 public class Product {
@@ -51,7 +19,7 @@ public class Product {
         this.vendorName = vendorName;
     }
 
-    // Getters and setters for each field
+    // Getters and Setters
     public int getProductId() {
         return productId;
     }
