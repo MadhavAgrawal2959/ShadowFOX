@@ -1,179 +1,170 @@
 package applications.inventory;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Controller {
 
+    // FXML Components: TableView and Columns
     @FXML
-    private TableColumn<Product, String> colProductId;
-
-
+    private TableView<Product> tableView;
     @FXML
-    private TextField product_id, product_name, product_type, product_arrival, quantity, price, vendor_name;
-
+    private TableColumn<Product, Integer> colProductId;
     @FXML
-    private TableView<Product> productTable;
-
+    private TableColumn<Product, String> colProductName;
     @FXML
-    private TableColumn<Product, String> colProductId, colProductName, colProductType, colProductArrival, colQuantity, colPrice, colVendorName;
-
-    // List to store the products
-    private ObservableList<Product> productList = FXCollections.observableArrayList();
-
-    // Method to handle "New" button click
+    private TableColumn<Product, String> colProductType;
     @FXML
-    public void addNewProduct(ActionEvent event) {
-        // Get the values from the text fields
-        String id = product_id.getText();
-        String name = product_name.getText();
-        String type = product_type.getText();
-        String arrival = product_arrival.getText();
-        String quantityValue = quantity.getText();
-        String priceValue = price.getText();
-        String vendor = vendor_name.getText();
-
-        // Add the new product to the list
-        Product newProduct = new Product(id, name, type, arrival, quantityValue, priceValue, vendor);
-        productList.add(newProduct);
-
-        // Update the table
-        productTable.setItems(productList);
-
-        // Clear the fields after adding
-        clearFields();
-    }
-
-    // Method to handle "Delete" button click
+    private TableColumn<Product, String> colProductArrival;
     @FXML
-    public void deleteProduct(ActionEvent event) {
-        Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
-        if (selectedProduct != null) {
-            // Confirm deletion
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this product?", ButtonType.YES, ButtonType.NO);
-            alert.showAndWait();
+    private TableColumn<Product, Integer> colQuantity;
+    @FXML
+    private TableColumn<Product, Double> colProductPrice;
+    @FXML
+    private TableColumn<Product, String> colVendorName;
 
-            if (alert.getResult() == ButtonType.YES) {
-                // Remove the selected product from the list
-                productList.remove(selectedProduct);
-            }
-        } else {
-            // If no product is selected, show an alert
-            Alert alert = new Alert(Alert.AlertType.WARNING, "No product selected to delete.", ButtonType.OK);
-            alert.showAndWait();
-        }
-    }
+    // FXML Text Fields for user input
+    @FXML
+    private TextField txtProductId;
+    @FXML
+    private TextField txtProductName;
+    @FXML
+    private TextField txtProductType;
+    @FXML
+    private TextField txtQuantity;
+    @FXML
+    private TextField txtProductPrice;
+    @FXML
+    private TextField txtVendorName;
 
-    // Method to clear input fields
-    private void clearFields() {
-        product_id.clear();
-        product_name.clear();
-        product_type.clear();
-        product_arrival.clear();
-        quantity.clear();
-        price.clear();
-        vendor_name.clear();
-    }
+    // Observable list to hold product data
+    private final ObservableList<Product> productList = FXCollections.observableArrayList();
 
-    // Initialize the table columns (bind table columns to product properties)
     @FXML
     public void initialize() {
-        colProductId.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
-        colProductName.setCellValueFactory(cellData -> cellData.getValue().productNameProperty());
-        colProductType.setCellValueFactory(cellData -> cellData.getValue().productTypeProperty());
-        colProductArrival.setCellValueFactory(cellData -> cellData.getValue().productArrivalProperty());
-        colQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
-        colPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
-        colVendorName.setCellValueFactory(cellData -> cellData.getValue().vendorNameProperty());
+        // Set up the table columns to bind to Product properties
+        colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colProductType.setCellValueFactory(new PropertyValueFactory<>("productType"));
+        colProductArrival.setCellValueFactory(new PropertyValueFactory<>("productArrival"));
+        colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colProductPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
+        colVendorName.setCellValueFactory(new PropertyValueFactory<>("vendorName"));
 
-        // Initialize the product list and bind it to the table view
-        productTable.setItems(productList);
+        // Load initial data into the TableView
+        tableView.setItems(productList);
     }
 
-    // Nested class representing a Product
-    public static class Product {
-        private final StringProperty productId;
-        private final StringProperty productName;
-        private final StringProperty productType;
-        private final StringProperty productArrival;
-        private final StringProperty quantity;
-        private final StringProperty price;
-        private final StringProperty vendorName;
+    // Method to handle new product entry
+    @FXML
+    public void handleNewEntry() {
+        try {
+            // Extract input values
+            int productId = Integer.parseInt(txtProductId.getText());
+            String productName = txtProductName.getText();
+            String productType = txtProductType.getText();
+            String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            int quantity = Integer.parseInt(txtQuantity.getText());
+            double productPrice = Double.parseDouble(txtProductPrice.getText());
+            String vendorName = txtVendorName.getText();
 
-        public Product(String productId, String productName, String productType, String productArrival, String quantity, String price, String vendorName) {
-            this.productId = new SimpleStringProperty(productId);
-            this.productName = new SimpleStringProperty(productName);
-            this.productType = new SimpleStringProperty(productType);
-            this.productArrival = new SimpleStringProperty(productArrival);
-            this.quantity = new SimpleStringProperty(quantity);
-            this.price = new SimpleStringProperty(price);
-            this.vendorName = new SimpleStringProperty(vendorName);
-        }
+            // Create a new Product object
+            Product newProduct = new Product(productId, productName, productType, formattedDateTime, quantity, productPrice, vendorName);
 
-        // Getters and property methods
-        public String getProductId() {
-            return productId.get();
-        }
+            // Add product to list and save it to the database
+            productList.add(newProduct);
+            saveToDatabase(newProduct);
 
-        public StringProperty productIdProperty() {
-            return productId;
-        }
+            // Clear input fields after entry
+            clearInputFields();
 
-        public String getProductName() {
-            return productName.get();
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid input format.");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
         }
+    }
 
-        public StringProperty productNameProperty() {
-            return productName;
-        }
+    // Method to save product to MySQL database
+    private void saveToDatabase(Product product) throws SQLException {
+        // Connection details for the database
+        String url = "jdbc:mysql://localhost:3306/inventory_management"; // Update with your database name
+        String user = "root"; // Update with your MySQL username
+        String password = "1234"; // Update with your MySQL password
 
-        public String getProductType() {
-            return productType.get();
-        }
+        // SQL query to insert new product
+        String sql = "INSERT INTO products (Product_id, Product_Name, Product_type, Product_Arrival, Quantity_In_Stock, Product_Price, Product_Supplier) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        public StringProperty productTypeProperty() {
-            return productType;
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, product.getProductId());
+            pstmt.setString(2, product.getProductName());
+            pstmt.setString(3, product.getProductType());
+            pstmt.setString(4, product.getProductArrival());
+            pstmt.setInt(5, product.getQuantity());
+            pstmt.setDouble(6, product.getProductPrice());
+            pstmt.setString(7, product.getVendorName());
+            pstmt.executeUpdate();
         }
+    }
 
-        public String getProductArrival() {
-            return productArrival.get();
-        }
+    // Method to handle product modification
+    @FXML
+    public void handleChange() {
+        Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
 
-        public StringProperty productArrivalProperty() {
-            return productArrival;
-        }
+        if (selectedProduct != null) {
+            // Update product details from text fields
+            selectedProduct.setProductId(Integer.parseInt(txtProductId.getText()));
+            selectedProduct.setProductName(txtProductName.getText());
+            selectedProduct.setProductType(txtProductType.getText());
 
-        public String getQuantity() {
-            return quantity.get();
-        }
+            // Refresh the TableView to reflect changes
+            tableView.refresh();
 
-        public StringProperty quantityProperty() {
-            return quantity;
+            // Clear input fields after modification
+            clearInputFields();
+        } else {
+            System.out.println("No product selected for modification.");
         }
+    }
 
-        public String getPrice() {
-            return price.get();
-        }
+    // Method to handle product deletion
+    @FXML
+    public void handleDelete() {
+        Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
 
-        public StringProperty priceProperty() {
-            return price;
-        }
+        if (selectedProduct != null) {
+            // Remove selected product from the list
+            productList.remove(selectedProduct);
 
-        public String getVendorName() {
-            return vendorName.get();
+            // Clear input fields after deletion
+            clearInputFields();
+        } else {
+            System.out.println("No product selected for deletion.");
         }
+    }
 
-        public StringProperty vendorNameProperty() {
-            return vendorName;
-        }
+    // Clear all input fields after an action
+    private void clearInputFields() {
+        txtProductId.clear();
+        txtProductName.clear();
+        txtProductType.clear();
+        txtQuantity.clear();
+        txtProductPrice.clear();
+        txtVendorName.clear();
     }
 }

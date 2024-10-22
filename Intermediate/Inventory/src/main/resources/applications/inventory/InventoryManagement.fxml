@@ -13,7 +13,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="787.0" prefWidth="991.0" style="-fx-background-color: #7E60BF;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="applications.inventory.Controller">
    <children>
       <Pane prefHeight="77.0" prefWidth="991.0" style="-fx-background-color: #433878;">
@@ -29,16 +28,21 @@
          <children>
             <Pane prefHeight="316.0" prefWidth="983.0" style="-fx-background-color: #FFE1FF;">
                <children>
-                  <GridPane layoutX="86.0" layoutY="1.0" prefHeight="108.0" prefWidth="776.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <GridPane layoutX="86.0" layoutY="1.0" prefHeight="250.0" prefWidth="776.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="1">
                            <font>
@@ -50,84 +54,61 @@
                               <Font name="Forte" size="20.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="384.13671875">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Id   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="0">
                            <font>
                               <Font name="Forte" size="20.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Id   " textAlignment="RIGHT" wrappingWidth="384.13671875">
+                        <TextField fx:id="txtProductId" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtProductName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtProductType" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Arrival   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="3">
                            <font>
                               <Font name="Forte" size="20.0" />
                            </font>
                         </Text>
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="Forte" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Price    " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Forte" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vendor Name    " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="6">
+                           <font>
+                              <Font name="Forte" size="20.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtProductArrival" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtVendorName" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField fx:id="txtQuantity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtProductPrice" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <Button layoutX="186.0" layoutY="269.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="New" />
-                  <Button layoutX="350.0" layoutY="269.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="New" />
-                  <Button layoutX="755.0" layoutY="267.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="New" />
-                  <Button layoutX="533.0" layoutY="267.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="New" />
+                  <Button layoutX="243.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleNewEntry" prefHeight="25.0" prefWidth="124.0" text="New Entry" />
+                  <Button layoutX="447.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleChange" prefHeight="25.0" prefWidth="124.0" text="Change" />
+                  <Button layoutX="651.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="25.0" prefWidth="124.0" text="Delete" />
                </children>
             </Pane>
             <Pane layoutY="314.0" prefHeight="380.0" prefWidth="983.0" style="-fx-background-color: #FFE1FF;">
                <children>
-                  <TableView layoutX="14.0" layoutY="14.0" prefHeight="351.0" prefWidth="956.0">
-                    <columns>
-                       <TableColumn fx:id="colProductId" text="Product ID" />
-
-                       <TableColumn prefWidth="92.0" text="Product Id" />
-                      <TableColumn prefWidth="193.0" text="Product Name" />
-                        <TableColumn prefWidth="127.0" text="Product Type" />
-                        <TableColumn prefWidth="149.0" text="Product Arrival" />
-                        <TableColumn minWidth="6.0" prefWidth="126.0" text="Quantity" />
-                        <TableColumn prefWidth="102.0" text="Product price" />
-                        <TableColumn prefWidth="166.0" text="Vendor Name" />
-                    </columns>
+                  <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="351.0" prefWidth="956.0">
+                     <columns>
+                        <TableColumn fx:id="colProductId" text="Product ID" />
+                        <TableColumn prefWidth="193.0" fx:id="colProductName" text="Product Name" />
+                        <TableColumn prefWidth="127.0" fx:id="colProductType" text="Product Type" />
+                        <TableColumn prefWidth="149.0" fx:id="colProductArrival" text="Product Arrival" />
+                        <TableColumn prefWidth="126.0" fx:id="colQuantity" text="Quantity" />
+                        <TableColumn prefWidth="102.0" fx:id="colProductPrice" text="Product Price" />
+                        <TableColumn prefWidth="166.0" fx:id="colVendorName" text="Vendor Name" />
+                     </columns>
                   </TableView>
                </children>
             </Pane>
          </children>
       </AnchorPane>
-      <GridPane layoutX="96.0" layoutY="183.0" prefHeight="142.0" prefWidth="776.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="403.0" minWidth="10.0" prefWidth="384.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="405.0" minWidth="10.0" prefWidth="399.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Forte" size="20.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Price   " textAlignment="RIGHT" wrappingWidth="384.13671875" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Forte" size="20.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Arrival   " textAlignment="RIGHT" wrappingWidth="384.13671875">
-               <font>
-                  <Font name="Forte" size="20.0" />
-               </font>
-            </Text>
-            <TextField GridPane.columnIndex="1" />
-            <TextField prefHeight="25.0" prefWidth="390.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vendor Name   " textAlignment="RIGHT" wrappingWidth="389.15625" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Forte" size="20.0" />
-               </font>
-            </Text>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         </children>
-      </GridPane>
    </children>
 </AnchorPane>
